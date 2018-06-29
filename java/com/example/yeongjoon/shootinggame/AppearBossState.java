@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.example.yeongjoon.gameframework.AppManager;
+import com.example.yeongjoon.gameframework.GraphicObject;
 import com.example.yeongjoon.gameframework.IState;
 import com.example.yeongjoon.gameframework.R;
 
@@ -18,6 +19,7 @@ public class AppearBossState implements IState {
     private Player m_player;
     private BackGround m_backGround;
     private Enemy_Boss m_boss;
+    private GraphicObject m_hp_bar;
 
     ArrayList<Missile> m_pmslist =  new ArrayList<Missile>();
 
@@ -49,6 +51,9 @@ public class AppearBossState implements IState {
         Bitmap bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.boss), 1000,800, true );
         m_boss = new Enemy_Boss(bitmap);
         m_boss.setPosition(50, -800);
+        bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.hp_bar), 500,50, true );
+        m_hp_bar = new GraphicObject(bitmap);
+        m_hp_bar.setPosition(300, 830);
     }
 
     @Override
@@ -78,9 +83,8 @@ public class AppearBossState implements IState {
                 }
             }
         }
-
         // 보스가 등장하고 있는 상태
-        if(appear_State) {
+        else if(appear_State) {
             if(System.currentTimeMillis() - TransformRegenScreen >= 20) {
                 TransformRegenScreen = System.currentTimeMillis();
                 m_boss.setPosition(m_boss.getX(), m_boss.getY() + 8);
@@ -88,16 +92,16 @@ public class AppearBossState implements IState {
             if(m_boss.getY() >= 0)
                 appear_State = false;
         }
-
-        for(int i=0; i<m_pmslist.size(); i++) {
-            Missile pms = m_pmslist.get(i);
-            pms.Update();
-            if(pms.state == Missile.STATE_OUT)
-                m_pmslist.remove(i);
+        else {
+            for(int i=0; i<m_pmslist.size(); i++) {
+                Missile pms = m_pmslist.get(i);
+                pms.Update();
+                if(pms.state == Missile.STATE_OUT)
+                    m_pmslist.remove(i);
+            }
+            CheckCollision();
+            ShootMissile();
         }
-
-        ShootMissile();
-        CheckCollision();
     }
 
     public void CheckCollision() {
@@ -107,6 +111,10 @@ public class AppearBossState implements IState {
             if (CollisionManager.CheckBoxToBox(pms.m_BoundBox, m_boss.m_BoundBox)) {
                 m_pmslist.remove(i);
                 m_boss.hp--;
+                if(m_boss.hp == 0)
+                    System.exit(0);
+                Bitmap bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.hp_bar), m_boss.hp*10,50, true );
+                m_hp_bar.SetBitmap(bitmap);
                 return;
             }
         }
@@ -129,6 +137,7 @@ public class AppearBossState implements IState {
             if(!appear_State) {
                 for(Missile pms : m_pmslist)
                     pms.Draw(canvas);
+                m_hp_bar.Draw(canvas);
             }
         }
 
