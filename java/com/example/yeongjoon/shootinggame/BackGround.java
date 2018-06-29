@@ -11,7 +11,7 @@ import com.example.yeongjoon.gameframework.GraphicObject;
 import com.example.yeongjoon.gameframework.R;
 
 public class BackGround extends GraphicObject {
-    static final float SCROLL_SPEED = 1.0f;
+    static float SCROLL_SPEED = 1.0f;
     private float m_scroll = -2000 + 480;
 
     Bitmap m_layer2;
@@ -24,17 +24,15 @@ public class BackGround extends GraphicObject {
         setPosition(0,(int)m_scroll);
     }
 
-    public BackGround(int width, int height, int backType) {
+    public BackGround(int backType) {
         super(null);
         Bitmap background = null;
         if(backType == 1)
-            background = AppManager.getInstance().getBitmap(R.drawable.background1);
+            background = AppManager.getInstance().getBitmap(R.drawable.background);
         else if(backType == 2)
             background = AppManager.getInstance().getBitmap(R.drawable.background2);
+        m_bitmap = Bitmap.createScaledBitmap(background, 1100,6000, true );
 
-        SetBitmap(Bitmap.createScaledBitmap(background, width, background.getHeight(), true));
-
-        m_layer2 = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.cloud), width, AppManager.getInstance().getBitmap(R.drawable.cloud).getHeight(), true);
         setPosition(0, (int)m_scroll);
     }
 

@@ -13,11 +13,13 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.example.yeongjoon.shootinggame.AppearBossState;
 import com.example.yeongjoon.shootinggame.GameState;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private IState m_state;
     private GameViewThread m_thread;
+    public AppearBossState m_AppearBossState;
 
     public GameView(Context context) {
         super(context);
@@ -33,6 +35,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         m_thread = new GameViewThread(getHolder(), this);
 
+        m_AppearBossState = new AppearBossState();
         ChangeGameState(new GameState(display.getWidth(), display.getHeight()));
     }
 
@@ -43,7 +46,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void Update() {
-        long gameTime = System.currentTimeMillis();
         m_state.Update();
     }
 

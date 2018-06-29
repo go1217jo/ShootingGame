@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.yeongjoon.shootinggame.AppearBossState;
 import com.example.yeongjoon.shootinggame.GameState;
 
 public class AppManager {
@@ -11,6 +12,7 @@ public class AppManager {
     private GameView m_gameView;
     private Resources m_resources;
     public GameState m_gameState;
+    public AppearBossState m_appearBossState;
 
     // Singleton 패턴 사용
     public static AppManager getInstance() {

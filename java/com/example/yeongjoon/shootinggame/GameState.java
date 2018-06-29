@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.example.yeongjoon.gameframework.AppManager;
+import com.example.yeongjoon.gameframework.GameView;
 import com.example.yeongjoon.gameframework.IState;
 import com.example.yeongjoon.gameframework.IntroState;
 import com.example.yeongjoon.gameframework.R;
@@ -34,6 +35,8 @@ public class GameState implements IState {
     Random randomEnemy = new Random();
     public int m_score = 0;
     Bitmap m_CharBit;
+
+    boolean boss_state = false;
 
     public int screen_width;
     public int screen_height;
@@ -113,7 +116,10 @@ public class GameState implements IState {
 
     @Override
     public void Destroy() {
-
+        // 보스전으로 전환 시
+        if(boss_state) {
+            AppManager.getInstance().getGameView().m_AppearBossState.Init(m_player, m_background);
+        }
     }
 
     @Override
@@ -145,6 +151,13 @@ public class GameState implements IState {
         MakeEnemy();
         ShootMissile();
         CheckCollision();
+
+        // 조건을 만족하면 보스 등장 상태로 변경
+        if(m_player.getLife() <= 2.5) {
+            AppManager.getInstance().getGameView().m_AppearBossState.Init(m_player, m_background);
+            AppManager.getInstance().getGameView().ChangeGameState(AppManager.getInstance().getGameView().m_AppearBossState);
+            Log.e("GameState", "플레이어, 배경 넘겨줌");
+        }
     }
 
     @Override
