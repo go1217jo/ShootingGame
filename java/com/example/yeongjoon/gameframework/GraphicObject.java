@@ -8,6 +8,11 @@ public class GraphicObject {
     protected int m_x;
     protected int m_y;
 
+    public GraphicObject() {
+        m_x = 0;
+        m_y = 0;
+    }
+
     public GraphicObject(Bitmap bitmap) {
         m_bitmap = bitmap;
         m_x = 0;

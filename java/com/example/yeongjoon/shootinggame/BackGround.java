@@ -30,7 +30,7 @@ public class BackGround extends GraphicObject {
         if(backType == 1)
             background = AppManager.getInstance().getBitmap(R.drawable.background);
         else if(backType == 2)
-            background = AppManager.getInstance().getBitmap(R.drawable.background2);
+            background = AppManager.getInstance().getBitmap(R.drawable.universe);
         m_bitmap = Bitmap.createScaledBitmap(background, 1100,6000, true );
 
         setPosition(0, (int)m_scroll);
@@ -38,7 +38,8 @@ public class BackGround extends GraphicObject {
 
     public void Update(long GameTime) {
         m_scroll = m_scroll + SCROLL_SPEED;
-        if(m_scroll>=0) m_scroll = -6000+2000;//배경연결을 위한 상수
+        if(m_scroll>=0)
+            m_scroll = -6000+2000;//배경연결을 위한 상수
         setPosition(0,(int)m_scroll);
     }
 

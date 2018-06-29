@@ -1,5 +1,7 @@
 package com.example.yeongjoon.shootinggame;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,10 +10,12 @@ import android.view.MotionEvent;
 
 import com.example.yeongjoon.gameframework.AppManager;
 import com.example.yeongjoon.gameframework.IState;
+import com.example.yeongjoon.gameframework.R;
 
 public class AppearBossState implements IState {
     private Player m_player;
     private BackGround m_backGround;
+    private Enemy_Boss m_boss;
 
     // 보스전 전환 상태
     boolean transform_State;
@@ -38,6 +42,9 @@ public class AppearBossState implements IState {
         Init();
         m_player = player;
         m_backGround = backGround;
+        Bitmap bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.boss), 1000,800, true );
+        m_boss = new Enemy_Boss(bitmap);
+        m_boss.setPosition(50, -800);
     }
 
     @Override
@@ -63,8 +70,19 @@ public class AppearBossState implements IState {
                     m_backGround = new BackGround(2);
                     m_backGround.SCROLL_SPEED = 1.0f;
                     transform_State = false;
+                    appear_State = true;
                 }
             }
+        }
+
+        // 보스가 등장하고 있는 상태
+        if(appear_State) {
+            if(System.currentTimeMillis() - TransformRegenScreen >= 20) {
+                TransformRegenScreen = System.currentTimeMillis();
+                m_boss.setPosition(m_boss.getX(), m_boss.getY() + 5);
+            }
+            if(m_boss.getY() >= 0)
+                appear_State = false;
         }
     }
 
@@ -72,6 +90,10 @@ public class AppearBossState implements IState {
     public void Render(Canvas canvas) {
         m_backGround.Draw(canvas);
         m_player.Draw(canvas);
+
+        if(!transform_State) {
+            m_boss.Draw(canvas);
+        }
 
         Paint paint = new Paint();
         paint.setTextSize(70);
