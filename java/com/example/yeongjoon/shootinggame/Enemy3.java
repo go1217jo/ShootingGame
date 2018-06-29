@@ -5,14 +5,17 @@ import android.graphics.Bitmap;
 import com.example.yeongjoon.gameframework.AppManager;
 import com.example.yeongjoon.gameframework.R;
 
+import java.util.Random;
+
 public class Enemy3 extends Enemy {
     public Enemy3() {
         super(AppManager.getInstance().getBitmap(R.drawable.enemy3));
         //this.initSpriteData(217, 325, 30, 6);
-        this.initSpriteData(186, 295, 30, 6);
-        hp = 20;
-        speed = 6.5f;
-        movetype = Enemy.MOVE_PATTERN_2;
+        //this.initSpriteData(186, 295, 30, 6);
+        this.initSpriteData(273,273,5,1);
+        hp = 5;
+        speed = 6.0f;
+        movetype = new Random().nextInt(3);
     }
 
     public Enemy3(Bitmap bitmap) {

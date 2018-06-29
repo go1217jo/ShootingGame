@@ -19,8 +19,9 @@ public class BackGround extends GraphicObject {
     private float m_scroll_2 = -2000 + 480;
 
     public BackGround() {
-        super(AppManager.getInstance().getBitmap(R.drawable.background2));
-        setPosition(0, (int)m_scroll);
+        super(AppManager.getInstance().getBitmap(R.drawable.background));
+        m_bitmap = Bitmap.createScaledBitmap(m_bitmap, 1100,6000, true );
+        setPosition(0,(int)m_scroll);
     }
 
     public BackGround(int width, int height, int backType) {
@@ -39,17 +40,12 @@ public class BackGround extends GraphicObject {
 
     public void Update(long GameTime) {
         m_scroll = m_scroll + SCROLL_SPEED;
-        if(m_scroll >= 0)
-            m_scroll = -2000 + 480;
-        setPosition(0, (int)m_scroll);
-        m_scroll_2 = m_scroll_2 + SCROLL_SPEED_2;
-        if(m_scroll_2 >= 0)
-            m_scroll_2 = -2000 + 480;
+        if(m_scroll>=0) m_scroll = -6000+2000;//배경연결을 위한 상수
+        setPosition(0,(int)m_scroll);
     }
 
     public void Draw(Canvas canvas) {
         canvas.drawBitmap(m_bitmap, m_x, m_y, null);
-        canvas.drawBitmap(m_layer2, m_x, m_scroll_2, null);
     }
 
 }

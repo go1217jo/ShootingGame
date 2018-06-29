@@ -9,18 +9,18 @@ import com.example.yeongjoon.gameframework.R;
 public class Missile_Player extends Missile {
 
     public Missile_Player(int x, int y) {
-        super(AppManager.getInstance().getBitmap(R.drawable.missile_1));
+        super(AppManager.getInstance().getBitmap(R.drawable.player_missile));
         this.setPosition(x, y);
     }
     public void Update() {
         m_y -= 20;
 
-        if(m_y < -10)
+        if(m_y < 0)
             state = STATE_OUT;
 
-        m_BoundBox.left = m_x;
-        m_BoundBox.top = m_y;
-        m_BoundBox.right = m_x + m_bitmap.getWidth()-10;
+        m_BoundBox.left = m_x + 20;
+        m_BoundBox.top = m_y + 40;
+        m_BoundBox.right = m_x + m_bitmap.getWidth();
         m_BoundBox.bottom = m_y + m_bitmap.getHeight();
     }
 }

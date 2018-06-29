@@ -38,8 +38,6 @@ public class Enemy extends SpriteAnimation {
         if(movetype == MOVE_PATTERN_1) {
             if(m_y <= 200)
                 m_y += speed;
-            else if(m_y > 2000)
-                state = STATE_OUT;
             else
                 m_y += speed * 2;
         }
@@ -59,10 +57,12 @@ public class Enemy extends SpriteAnimation {
                 m_y += speed;
             }
         }
+        if(m_y > 2000)
+            state = STATE_OUT;
     }
 
     public void Attack() {
-        if(System.currentTimeMillis() - LastShoot >= 1000) {
+        if(System.currentTimeMillis() - LastShoot >= 1200) {
             LastShoot = System.currentTimeMillis();
             // 미사일 발사 로직
             AppManager.getInstance().m_gameState.m_enemmslist.add(new Missile_Enemy(m_x + 10, m_y + m_bitmap.getHeight()));

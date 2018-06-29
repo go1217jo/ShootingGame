@@ -19,16 +19,16 @@ public class AppManager {
         return s_instance;
     }
 
-    void setGameView(GameView _gameView) {
+    public void setGameView(GameView _gameView) {
         m_gameView= _gameView;
     }
-    void setResources(Resources _resources) {
+    public void setResources(Resources _resources) {
         m_resources = _resources;
     }
-    GameView getGameView( ) {
+    public GameView getGameView( ) {
         return m_gameView;
     }
-    Resources getResource( ) {
+    public Resources getResource( ) {
         return m_resources;
     }
 
