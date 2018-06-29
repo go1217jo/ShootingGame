@@ -2,6 +2,7 @@ package com.example.yeongjoon.shootinggame;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.yeongjoon.gameframework.AppManager;
 import com.example.yeongjoon.gameframework.GraphicObject;
@@ -9,6 +10,7 @@ import com.example.yeongjoon.gameframework.R;
 
 public class Enemy_Boss extends GraphicObject {
     int hp = 50;
+    Rect m_BoundBox = new Rect();
 
     public Enemy_Boss() {
 
@@ -16,6 +18,7 @@ public class Enemy_Boss extends GraphicObject {
 
     public Enemy_Boss(Bitmap bitmap) {
         super(bitmap);
+        m_BoundBox.set(50, 0, 950, 800);
     }
 
     @Override

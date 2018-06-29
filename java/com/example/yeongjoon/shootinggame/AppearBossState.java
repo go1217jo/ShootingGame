@@ -12,20 +12,25 @@ import com.example.yeongjoon.gameframework.AppManager;
 import com.example.yeongjoon.gameframework.IState;
 import com.example.yeongjoon.gameframework.R;
 
+import java.util.ArrayList;
+
 public class AppearBossState implements IState {
     private Player m_player;
     private BackGround m_backGround;
     private Enemy_Boss m_boss;
 
+    ArrayList<Missile> m_pmslist =  new ArrayList<Missile>();
+
     // 보스전 전환 상태
     boolean transform_State;
     // 보스 등장 라이팅 이펙트 상태
-    boolean lighting_State;
     // 보스 등장하고 있는 상태
     boolean appear_State;
 
     // 화면 전환 속도
     long TransformRegenScreen = System.currentTimeMillis();
+    // 미사일 발사 속도
+    long LastRegenMissile = System.currentTimeMillis();
 
     public AppearBossState() {
         AppManager.getInstance().m_appearBossState = this;
@@ -34,7 +39,6 @@ public class AppearBossState implements IState {
     @Override
     public void Init() {
         transform_State = true;
-        lighting_State = false;
         appear_State = false;
     }
 
@@ -79,10 +83,39 @@ public class AppearBossState implements IState {
         if(appear_State) {
             if(System.currentTimeMillis() - TransformRegenScreen >= 20) {
                 TransformRegenScreen = System.currentTimeMillis();
-                m_boss.setPosition(m_boss.getX(), m_boss.getY() + 5);
+                m_boss.setPosition(m_boss.getX(), m_boss.getY() + 8);
             }
             if(m_boss.getY() >= 0)
                 appear_State = false;
+        }
+
+        for(int i=0; i<m_pmslist.size(); i++) {
+            Missile pms = m_pmslist.get(i);
+            pms.Update();
+            if(pms.state == Missile.STATE_OUT)
+                m_pmslist.remove(i);
+        }
+
+        ShootMissile();
+        CheckCollision();
+    }
+
+    public void CheckCollision() {
+        for (int i = 0; i < m_pmslist.size(); i++) {
+            Missile pms = m_pmslist.get(i);
+            // 적과 유저 미사일과 충돌
+            if (CollisionManager.CheckBoxToBox(pms.m_BoundBox, m_boss.m_BoundBox)) {
+                m_pmslist.remove(i);
+                m_boss.hp--;
+                return;
+            }
+        }
+    }
+
+    public void ShootMissile() {
+        if(System.currentTimeMillis() - LastRegenMissile >= 300) {
+            LastRegenMissile = System.currentTimeMillis();
+            m_pmslist.add(new Missile_Player(m_player.getX() + 10, m_player.getY() - 10));
         }
     }
 
@@ -93,6 +126,10 @@ public class AppearBossState implements IState {
 
         if(!transform_State) {
             m_boss.Draw(canvas);
+            if(!appear_State) {
+                for(Missile pms : m_pmslist)
+                    pms.Draw(canvas);
+            }
         }
 
         Paint paint = new Paint();

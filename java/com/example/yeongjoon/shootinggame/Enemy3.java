@@ -8,6 +8,7 @@ import com.example.yeongjoon.gameframework.R;
 import java.util.Random;
 
 public class Enemy3 extends Enemy {
+
     public Enemy3() {
         super(AppManager.getInstance().getBitmap(R.drawable.enemy3));
         //this.initSpriteData(217, 325, 30, 6);
