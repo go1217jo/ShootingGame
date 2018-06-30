@@ -12,6 +12,9 @@ public class Missile extends GraphicObject {
 
     Rect m_BoundBox = new Rect();
 
+    public Missile() {
+
+    }
     public Missile(Bitmap bitmap) {
         super(bitmap);
     }

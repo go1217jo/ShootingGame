@@ -22,10 +22,10 @@ public class AppearBossState implements IState {
     private GraphicObject m_hp_bar;
 
     ArrayList<Missile> m_pmslist =  new ArrayList<Missile>();
+    ArrayList<Missile> m_bossmslist = new ArrayList<Missile>();
 
     // 보스전 전환 상태
     boolean transform_State;
-    // 보스 등장 라이팅 이펙트 상태
     // 보스 등장하고 있는 상태
     boolean appear_State;
 
@@ -33,6 +33,7 @@ public class AppearBossState implements IState {
     long TransformRegenScreen = System.currentTimeMillis();
     // 미사일 발사 속도
     long LastRegenMissile = System.currentTimeMillis();
+
 
     public AppearBossState() {
         AppManager.getInstance().m_appearBossState = this;
@@ -92,6 +93,7 @@ public class AppearBossState implements IState {
             if(m_boss.getY() >= 0)
                 appear_State = false;
         }
+        // 보스전 진행
         else {
             for(int i=0; i<m_pmslist.size(); i++) {
                 Missile pms = m_pmslist.get(i);
@@ -99,6 +101,15 @@ public class AppearBossState implements IState {
                 if(pms.state == Missile.STATE_OUT)
                     m_pmslist.remove(i);
             }
+
+            for(int i=0; i < m_bossmslist.size(); i++){
+                Missile bossms = m_bossmslist.get(i);
+                bossms.Update();
+                if(bossms.state == Missile.STATE_OUT) {
+                    m_bossmslist.remove(i);
+                }
+            }
+            m_boss.Attack();
             CheckCollision();
             ShootMissile();
         }
@@ -115,6 +126,17 @@ public class AppearBossState implements IState {
                     System.exit(0);
                 Bitmap bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.hp_bar), m_boss.hp*10,50, true );
                 m_hp_bar.SetBitmap(bitmap);
+                return;
+            }
+        }
+        for (int i = 0; i < m_bossmslist.size(); i++) {
+            Missile bossms = m_bossmslist.get(i);
+            // 적과 유저 미사일과 충돌
+            if (CollisionManager.CheckBoxToBox(bossms.m_BoundBox, m_player.m_BoundBox)) {
+                m_bossmslist.remove(i);
+                m_player.destroyPlayer();
+                if(m_player.m_Life == 0)
+                    System.exit(0);
                 return;
             }
         }
@@ -137,13 +159,15 @@ public class AppearBossState implements IState {
             if(!appear_State) {
                 for(Missile pms : m_pmslist)
                     pms.Draw(canvas);
+                for(Missile bossms : m_bossmslist)
+                    bossms.Draw(canvas);
                 m_hp_bar.Draw(canvas);
             }
         }
 
         Paint paint = new Paint();
         paint.setTextSize(70);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setFakeBoldText(true);
         canvas.drawText("현재 학점 : " + String.valueOf(m_player.getLife()), 400, 80,paint);
     }
