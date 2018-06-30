@@ -122,8 +122,12 @@ public class AppearBossState implements IState {
             if (CollisionManager.CheckBoxToBox(pms.m_BoundBox, m_boss.m_BoundBox)) {
                 m_pmslist.remove(i);
                 m_boss.hp--;
-                if(m_boss.hp == 0)
-                    System.exit(0);
+                if(m_boss.hp == 0) {
+                    EndState endState = new EndState();
+                    endState.Init(m_backGround, true);
+                    AppManager.getInstance().getGameView().ChangeGameState(endState);
+                    return;
+                }
                 Bitmap bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.hp_bar), m_boss.hp*10,50, true );
                 m_hp_bar.SetBitmap(bitmap);
                 return;
@@ -135,8 +139,12 @@ public class AppearBossState implements IState {
             if (CollisionManager.CheckBoxToBox(bossms.m_BoundBox, m_player.m_BoundBox)) {
                 m_bossmslist.remove(i);
                 m_player.destroyPlayer();
-                if(m_player.m_Life == 0)
-                    System.exit(0);
+                if(m_player.m_Life == 0) {
+                    EndState endState = new EndState();
+                    endState.Init(m_backGround, false);
+                    AppManager.getInstance().getGameView().ChangeGameState(endState);
+                    return;
+                }
                 return;
             }
         }

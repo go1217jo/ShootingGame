@@ -20,6 +20,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private IState m_state;
     private GameViewThread m_thread;
     public AppearBossState m_AppearBossState;
+    public int m_screen_width;
+    public int m_screen_height;
 
     public GameView(Context context) {
         super(context);
@@ -36,7 +38,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         m_thread = new GameViewThread(getHolder(), this);
 
         m_AppearBossState = new AppearBossState();
-        ChangeGameState(new GameState(display.getWidth(), display.getHeight()));
+        m_screen_width = display.getWidth();
+        m_screen_height = display.getHeight();
+        ChangeGameState(new GameState(m_screen_width, m_screen_height));
     }
 
     @Override
