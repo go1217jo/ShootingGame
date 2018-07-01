@@ -47,7 +47,7 @@ public class EndState implements IState {
 
         if(Win_State) {
             paint.setColor(Color.YELLOW);
-            canvas.drawText("졸업을 축하드립니다!", 140, 800, paint);
+            canvas.drawText("졸업을 축하드립니다!", 100, 800, paint);
         }
         else {
             paint.setColor(Color.RED);

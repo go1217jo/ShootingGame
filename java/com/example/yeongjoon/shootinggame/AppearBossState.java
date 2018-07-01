@@ -21,6 +21,8 @@ public class AppearBossState implements IState {
     private Enemy_Boss m_boss;
     private GraphicObject m_hp_bar;
 
+    private GraphicObject m_hit;
+    private boolean Hit_State = false;
     ArrayList<Missile> m_pmslist =  new ArrayList<Missile>();
     ArrayList<Missile> m_bossmslist = new ArrayList<Missile>();
 
@@ -55,6 +57,8 @@ public class AppearBossState implements IState {
         bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.hp_bar), 500,50, true );
         m_hp_bar = new GraphicObject(bitmap);
         m_hp_bar.setPosition(300, 830);
+        bitmap = Bitmap.createScaledBitmap(AppManager.getInstance().getBitmap(R.drawable.hit), 200, 200, true);
+        m_hit = new GraphicObject(bitmap);
     }
 
     @Override
@@ -116,10 +120,13 @@ public class AppearBossState implements IState {
     }
 
     public void CheckCollision() {
+        Hit_State = false;
         for (int i = 0; i < m_pmslist.size(); i++) {
             Missile pms = m_pmslist.get(i);
-            // 적과 유저 미사일과 충돌
+            // 플레이어 미사일과 보스 충돌
             if (CollisionManager.CheckBoxToBox(pms.m_BoundBox, m_boss.m_BoundBox)) {
+                Hit_State = true;
+                m_hit.setPosition(m_pmslist.get(i).getX(), m_pmslist.get(i).getY());
                 m_pmslist.remove(i);
                 m_boss.hp--;
                 if(m_boss.hp == 0) {
@@ -135,7 +142,7 @@ public class AppearBossState implements IState {
         }
         for (int i = 0; i < m_bossmslist.size(); i++) {
             Missile bossms = m_bossmslist.get(i);
-            // 적과 유저 미사일과 충돌
+            // 보스미사일과 플레이어 충돌
             if (CollisionManager.CheckBoxToBox(bossms.m_BoundBox, m_player.m_BoundBox)) {
                 m_bossmslist.remove(i);
                 m_player.destroyPlayer();
@@ -170,6 +177,8 @@ public class AppearBossState implements IState {
                 for(Missile bossms : m_bossmslist)
                     bossms.Draw(canvas);
                 m_hp_bar.Draw(canvas);
+                if(Hit_State)
+                    m_hit.Draw(canvas);
             }
         }
 
